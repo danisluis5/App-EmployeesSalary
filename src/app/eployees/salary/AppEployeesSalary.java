@@ -5,7 +5,18 @@
  */
 package app.eployees.salary;
 
+import app.eployees.salary.bean.PhanXuong;
+import app.eployees.salary.render.PhanXuongComboboxModel;
+import app.eployees.salary.utils.UtilsClass;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -16,10 +27,15 @@ public class AppEployeesSalary extends javax.swing.JFrame {
     /**
      * Creates new form AppEployeesSalary
      */
+    private ArrayList<String> list = new ArrayList<String>();
+    
     public AppEployeesSalary() {
         initComponents();
         ImageIcon image = new ImageIcon(getClass().getResource("/images/logo.png"));
         this.setIconImage(image.getImage());
+        cbPhanXuong.setModel(new PhanXuongComboboxModel());
+        PhanXuong objectx = (PhanXuong) new PhanXuongComboboxModel().getElementAt(cbPhanXuong.getSelectedIndex());
+        tfSoSPC.setText(String.valueOf(objectx.getSoSPC()));
     }
 
     /**
@@ -38,18 +54,18 @@ public class AppEployeesSalary extends javax.swing.JFrame {
         soSP = new javax.swing.JLabel();
         tfMaNV = new javax.swing.JTextField();
         phanXuong = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
+        cbPhanXuong = new javax.swing.JComboBox();
         soSPC = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        tfSoSPC = new javax.swing.JTextField();
         tienLuong = new javax.swing.JLabel();
         tfSoSP = new javax.swing.JTextField();
         btnThem = new javax.swing.JButton();
         btnTinh = new javax.swing.JButton();
         btnThoat = new javax.swing.JButton();
         ttNhanVien = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane3 = new javax.swing.JScrollPane();
         tfInfor = new javax.swing.JTextArea();
-        jLabel2 = new javax.swing.JLabel();
+        tfSPC = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("                                          Quản lý nhân viên - VinaENTER EDU");
@@ -96,10 +112,15 @@ public class AppEployeesSalary extends javax.swing.JFrame {
         jPanel1.add(phanXuong);
         phanXuong.setBounds(71, 166, 70, 20);
 
-        jComboBox1.setForeground(new java.awt.Color(255, 255, 255));
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(jComboBox1);
-        jComboBox1.setBounds(153, 164, 79, 32);
+        cbPhanXuong.setForeground(new java.awt.Color(255, 255, 255));
+        cbPhanXuong.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbPhanXuong.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbPhanXuongActionPerformed(evt);
+            }
+        });
+        jPanel1.add(cbPhanXuong);
+        cbPhanXuong.setBounds(153, 164, 79, 32);
 
         soSPC.setForeground(new java.awt.Color(255, 255, 255));
         soSPC.setText("Số sản phẩm chuẩn:");
@@ -108,10 +129,10 @@ public class AppEployeesSalary extends javax.swing.JFrame {
         jPanel1.add(soSPC);
         soSPC.setBounds(248, 166, 120, 20);
 
-        jTextField1.setEditable(false);
-        jTextField1.setBorder(javax.swing.BorderFactory.createLineBorder(javax.swing.UIManager.getDefaults().getColor("Button.background")));
-        jPanel1.add(jTextField1);
-        jTextField1.setBounds(372, 164, 40, 32);
+        tfSoSPC.setEditable(false);
+        tfSoSPC.setBorder(javax.swing.BorderFactory.createLineBorder(javax.swing.UIManager.getDefaults().getColor("Button.background")));
+        jPanel1.add(tfSoSPC);
+        tfSoSPC.setBounds(372, 164, 40, 32);
 
         tienLuong.setForeground(new java.awt.Color(255, 255, 255));
         tienLuong.setText("Tiền lương:");
@@ -126,6 +147,11 @@ public class AppEployeesSalary extends javax.swing.JFrame {
         btnThem.setForeground(new java.awt.Color(51, 102, 255));
         btnThem.setText("Thêm");
         btnThem.setBorder(null);
+        btnThem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnThemActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnThem);
         btnThem.setBounds(263, 258, 59, 28);
 
@@ -133,6 +159,11 @@ public class AppEployeesSalary extends javax.swing.JFrame {
         btnTinh.setForeground(new java.awt.Color(51, 102, 255));
         btnTinh.setText("Tính lương");
         btnTinh.setBorder(null);
+        btnTinh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTinhActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnTinh);
         btnTinh.setBounds(161, 258, 90, 28);
 
@@ -140,6 +171,11 @@ public class AppEployeesSalary extends javax.swing.JFrame {
         btnThoat.setForeground(new java.awt.Color(51, 102, 255));
         btnThoat.setText("Thoát");
         btnThoat.setBorder(null);
+        btnThoat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnThoatActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnThoat);
         btnThoat.setBounds(334, 258, 59, 28);
 
@@ -148,24 +184,171 @@ public class AppEployeesSalary extends javax.swing.JFrame {
         jPanel1.add(ttNhanVien);
         ttNhanVien.setBounds(71, 308, 120, 20);
 
-        tfInfor.setColumns(20);
-        tfInfor.setLineWrap(true);
+        tfInfor.setColumns(22);
         tfInfor.setRows(5);
         tfInfor.setWrapStyleWord(true);
-        jScrollPane1.setViewportView(tfInfor);
+        jScrollPane3.setViewportView(tfInfor);
 
-        jPanel1.add(jScrollPane1);
-        jScrollPane1.setBounds(70, 340, 340, 190);
+        jPanel1.add(jScrollPane3);
+        jScrollPane3.setBounds(66, 336, 350, 180);
 
-        jLabel2.setIcon(new javax.swing.ImageIcon("D:\\ManagerGit\\DanisLuis5\\App-EmployeesSalary\\src\\images\\background.png")); // NOI18N
-        jPanel1.add(jLabel2);
-        jLabel2.setBounds(0, -10, 510, 600);
+        tfSPC.setIcon(new javax.swing.ImageIcon("D:\\ManagerGit\\DanisLuis5\\App-EmployeesSalary\\src\\images\\background.png")); // NOI18N
+        jPanel1.add(tfSPC);
+        tfSPC.setBounds(0, -10, 510, 600);
 
         getContentPane().add(jPanel1);
         jPanel1.setBounds(0, 0, 510, 590);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnThoatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThoatActionPerformed
+        File file = new File("nhanvien.dat");
+        if(!file.exists()){
+            try {
+                file.createNewFile();
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        try{
+            BufferedWriter br = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
+            for (String string : list) {
+                br.write(string);
+                br.newLine();
+            }
+            br.close();
+        }catch(IOException exx){
+            System.out.println(exx.getMessage());
+        }
+        System.exit(0);
+    }//GEN-LAST:event_btnThoatActionPerformed
+
+    private void btnTinhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTinhActionPerformed
+        int soSP = 0;
+        if(tfMaNV.getText().isEmpty()){
+            JOptionPane.showMessageDialog(new AppEployeesSalary(), "Nhập mã nhân viên","Thông báo",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        try{
+            if(tfSoSP.getText().isEmpty()){
+                JOptionPane.showMessageDialog(new AppEployeesSalary(), "Nhập vào số sản phẩm","Thông báo",JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            soSP = Integer.parseInt(tfSoSP.getText());
+        }catch(NumberFormatException exx){
+            JOptionPane.showMessageDialog(new AppEployeesSalary(), "Nhập số sản phẩm là số","Thông báo",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        PhanXuong objecty = (PhanXuong) new PhanXuongComboboxModel().getElementAt(cbPhanXuong.getSelectedIndex());
+        int soSPC = Integer.parseInt(tfSoSPC.getText());
+        int cost1 = 20000;
+        int cost2 = 30000;
+        if("A".equals(objecty.getName())){
+            if(soSPC < soSP){
+                String result = String.valueOf(soSPC*cost1 + (soSP - soSPC)*cost2);
+                tfTienLuong.setText(new UtilsClass().changeCurrencyVND(result)+" VND");
+            }else{
+                String result = String.valueOf((soSPC - soSP)*cost2);
+                tfTienLuong.setText(new UtilsClass().changeCurrencyVND(result)+" VND");
+            }
+        }else if("B".equals(objecty.getName())){
+           if(soSPC < soSP){
+                String result = String.valueOf(soSPC*cost1 + (soSP - soSPC)*cost2);
+                tfTienLuong.setText(new UtilsClass().changeCurrencyVND(result)+" VND");
+            }else{
+                String result = String.valueOf((soSPC - soSP)*cost2);
+                tfTienLuong.setText(new UtilsClass().changeCurrencyVND(result)+" VND");
+            }
+        }else if("C".equals(objecty.getName())){
+           if(soSPC < soSP){
+                String result = String.valueOf(soSPC*cost1 + (soSP - soSPC)*cost2);
+                tfTienLuong.setText(new UtilsClass().changeCurrencyVND(result)+" VND");
+            }else{
+                String result = String.valueOf((soSPC - soSP)*cost2);
+                tfTienLuong.setText(new UtilsClass().changeCurrencyVND(result)+" VND");
+            }
+        }else if("D".equals(objecty.getName())){
+           if(soSPC < soSP){
+                String result = String.valueOf(soSPC*cost1 + (soSP - soSPC)*cost2);
+                tfTienLuong.setText(new UtilsClass().changeCurrencyVND(result)+" VND");
+            }else{
+                String result = String.valueOf((soSPC - soSP)*cost2);
+                tfTienLuong.setText(new UtilsClass().changeCurrencyVND(result)+" VND");
+            }
+        }
+    }//GEN-LAST:event_btnTinhActionPerformed
+
+    private void cbPhanXuongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPhanXuongActionPerformed
+        PhanXuong phanXuong = (PhanXuong) new PhanXuongComboboxModel().getElementAt(cbPhanXuong.getSelectedIndex());
+        if("A".equals(phanXuong.getName())){
+            tfSoSPC.setText(String.valueOf(phanXuong.getSoSPC()));
+        }else if("B".equals(phanXuong.getName())){
+            tfSoSPC.setText(String.valueOf(phanXuong.getSoSPC()));
+        }else if("C".equals(phanXuong.getName())){
+            tfSoSPC.setText(String.valueOf(phanXuong.getSoSPC()));
+        }else if("D".equals(phanXuong.getName())){
+            tfSoSPC.setText(String.valueOf(phanXuong.getSoSPC()));
+        }
+    }//GEN-LAST:event_cbPhanXuongActionPerformed
+
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
+        int soSP = 0;
+        if(tfMaNV.getText().isEmpty()){
+            JOptionPane.showMessageDialog(new AppEployeesSalary(), "Nhập mã nhân viên","Thông báo",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        try{
+            if(tfSoSP.getText().isEmpty()){
+                JOptionPane.showMessageDialog(new AppEployeesSalary(), "Nhập vào số sản phẩm","Thông báo",JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            soSP = Integer.parseInt(tfSoSP.getText());
+        }catch(NumberFormatException exx){
+            JOptionPane.showMessageDialog(new AppEployeesSalary(), "Nhập số sản phẩm là số","Thông báo",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        PhanXuong objecty = (PhanXuong) new PhanXuongComboboxModel().getElementAt(cbPhanXuong.getSelectedIndex());
+        int soSPC = Integer.parseInt(tfSoSPC.getText());
+        int cost1 = 20000;
+        int cost2 = 30000;
+        String outString = "Mã NV: "+tfMaNV.getText()+" - Số SP: "+soSP+" - Phân xưởng: "+objecty.getName()+" - Tiền lương: ";
+        if("A".equals(objecty.getName())){
+            if(soSPC < soSP){
+                String result = String.valueOf(soSPC*cost1 + (soSP - soSPC)*cost2);
+                outString += new UtilsClass().changeCurrencyVND(result)+" VND";
+            }else{
+                String result = String.valueOf((soSPC - soSP)*cost2);
+                outString += new UtilsClass().changeCurrencyVND(result)+" VND";
+            }
+        }else if("B".equals(objecty.getName())){
+           if(soSPC < soSP){
+                String result = String.valueOf(soSPC*cost1 + (soSP - soSPC)*cost2);
+                outString += new UtilsClass().changeCurrencyVND(result)+" VND";
+            }else{
+                String result = String.valueOf((soSPC - soSP)*cost2);
+                outString += new UtilsClass().changeCurrencyVND(result)+" VND";
+            }
+        }else if("C".equals(objecty.getName())){
+           if(soSPC < soSP){
+                String result = String.valueOf(soSPC*cost1 + (soSP - soSPC)*cost2);
+                outString += new UtilsClass().changeCurrencyVND(result)+" VND";
+            }else{
+                String result = String.valueOf((soSPC - soSP)*cost2);
+                outString += new UtilsClass().changeCurrencyVND(result)+" VND";
+            }
+        }else if("D".equals(objecty.getName())){
+           if(soSPC < soSP){
+                String result = String.valueOf(soSPC*cost1 + (soSP - soSPC)*cost2);
+                outString += new UtilsClass().changeCurrencyVND(result)+" VND";
+            }else{
+                String result = String.valueOf((soSPC - soSP)*cost2);
+                outString += new UtilsClass().changeCurrencyVND(result)+" VND";
+            }
+        }
+        tfInfor.append(outString+"\n");
+        list.add(outString);
+    }//GEN-LAST:event_btnThemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -206,19 +389,19 @@ public class AppEployeesSalary extends javax.swing.JFrame {
     private javax.swing.JButton btnThem;
     private javax.swing.JButton btnThoat;
     private javax.swing.JButton btnTinh;
-    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JComboBox cbPhanXuong;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel maNV;
     private javax.swing.JLabel phanXuong;
     private javax.swing.JLabel soSP;
     private javax.swing.JLabel soSPC;
     private javax.swing.JTextArea tfInfor;
     private javax.swing.JTextField tfMaNV;
+    private javax.swing.JLabel tfSPC;
     private javax.swing.JTextField tfSoSP;
+    private javax.swing.JTextField tfSoSPC;
     private javax.swing.JTextField tfTienLuong;
     private javax.swing.JLabel tienLuong;
     private javax.swing.JLabel ttNhanVien;
