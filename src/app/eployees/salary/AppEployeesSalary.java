@@ -13,8 +13,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -192,9 +190,9 @@ public class AppEployeesSalary extends javax.swing.JFrame {
         jPanel1.add(jScrollPane3);
         jScrollPane3.setBounds(66, 336, 350, 180);
 
-        tfSPC.setIcon(new javax.swing.ImageIcon("D:\\ManagerGit\\DanisLuis5\\App-EmployeesSalary\\src\\images\\background.png")); // NOI18N
+        tfSPC.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/background.png"))); // NOI18N
         jPanel1.add(tfSPC);
-        tfSPC.setBounds(0, -10, 510, 600);
+        tfSPC.setBounds(0, 0, 510, 590);
 
         getContentPane().add(jPanel1);
         jPanel1.setBounds(0, 0, 510, 590);
